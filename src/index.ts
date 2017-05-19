@@ -34,13 +34,15 @@ import * as path from 'path';
 import * as url from 'url';
 import * as interceptor from 'express-interceptor';
 
-const DEFAULT_PORT = 9002;
+var host = process.env.PORT ? '0.0.0.0' : '127.0.0.1';
+var port = process.env.PORT || 9002;
+
 const argv = require('yargs')
   .usage('Usage: $0 [URL]')
   .alias('p', 'port')
   .nargs('p', 1)
   .describe('p', 'HTTP Port')
-  .default('p', DEFAULT_PORT)
+  .default('p', port)
   .alias('H', 'header')
   .describe('H', 'Specify headers to the proxied server in cURL format,' +
      'e.g.: "Authorization: bearer XXXXXXXXX"')
@@ -150,7 +152,7 @@ getIntrospection().then(introspection => {
 
   app.get('/', express.static(path.join(__dirname, 'static')));
 
-  app.listen(argv.port);
+  app.listen(argv.port, host);
   log(`\n${chalk.green('✔')} Your GraphQL Fake API is ready to use 🚀
   http://localhost:${argv.port}/graphql
   `);
