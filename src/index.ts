@@ -95,7 +95,6 @@ getIntrospection().then(introspection => {
       graphiql: true,
       schema,
       rootValue: (info: RequestInfo) => {
-        console.log('root start');
         // TODO copy headers
         const operationName = info.operationName;
         const variables = info.variables;
