@@ -86,7 +86,7 @@
   <div id="graphiql-container"></div>
   <div id="footer">
     <span class="label"> Data Link: </span>
-    <a href="test" target="_blank" id="footer_link">http://localhost:9002/?query=%0A%23%20This%20is%20GraphQL%20Community%20graph%20proxy%20powered%20with%20GraphQL%20Lodash%0A%23%20GraphQL%20Community%20graph%3A%20https%3A%2F%2Fgithub.com%2Fneo4j-graphql%2Fgraphql-community%0A%23%20GraphQL%20Lodash%3A%20https%3A%2F%2Fgithub.com%2Fapis-guru%2Fgraphql-lodash%0A%23%0A%23%20With%20%E2%9D%A4%20by%20APIs.guru%0A%0A%7B%0A%20%20User%20%7B%0A%20%20%20%20name%0A%20%20%7D%0A%7D&operationName=null</a>
+    <a href="#" target="_blank" id="footer_link"></a>
     <span class="label">
       <input type="checkbox" id="unwrap_checkbox">
       <label for="unwrap_checkbox"> Unwrap data </label>
@@ -152,7 +152,7 @@
 
     function dataLink(link) {
       var extraQuery = checkbox.checked ? '?raw=true&unwrap=true&' : '?raw=true&'
-      link.href = window.location.href.replace('&operationName=null', '').split('?').join(extraQuery);
+      link.href = window.location.href.replace(/&operationName=(null|undefined)/, '').split('?').join(extraQuery);
       link.pathname = 'graphql';
       link.innerText = link.href;
     }

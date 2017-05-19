@@ -117,10 +117,14 @@ getIntrospection().then(introspection => {
       // Appends a paragraph at the end of the response body
       intercept: function(body, send) {
         const jsonBody = JSON.parse(body);
-        if (jsonBody.data)
+        if (jsonBody.data) {
+          if (typeof jsonBody.data === "string") {
+            return send(jsonBody.data);
+          }
           send(JSON.stringify(jsonBody.data, null, 2));
-        else
+        } else {
           send(body);
+        }
       }
     };
   }));
