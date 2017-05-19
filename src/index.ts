@@ -128,7 +128,7 @@ getIntrospection().then(introspection => {
     let gqlLodashResult;
 
     return {
-      graphiql: true,
+      graphiql: false,
       schema,
       rootValue: (info: RequestInfo) => {
         // TODO copy headers
