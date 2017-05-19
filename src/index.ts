@@ -30,6 +30,8 @@ import * as chalk from 'chalk';
 import * as cors from 'cors';
 import * as set from 'lodash/set.js';
 import * as path from 'path';
+import * as url from 'url';
+import * as interceptor from 'express-interceptor';
 
 const DEFAULT_PORT = 9002;
 const argv = require('yargs')
@@ -88,6 +90,26 @@ getIntrospection().then(introspection => {
   let schema = extendSchema(clientSchema, lodashDirectiveAST);
 
   const app = express();
+
+  app.use(interceptor((req, res) => {
+    return {
+      isInterceptable: function(){
+        const queryArgs = req.url && url.parse(req.url, true).query || {}
+        return  queryArgs.unwrap &&
+          // Only JSON responses will be intercepted
+          /application\/json/.test(res.get('Content-Type'));
+      },
+      // Appends a paragraph at the end of the response body
+      intercept: function(body, send) {
+        const jsonBody = JSON.parse(body);
+        if (jsonBody.data)
+          send(JSON.stringify(jsonBody.data, null, 2));
+        else
+          send(body);
+      }
+    };
+  }));
+
   app.options('/graphql', cors(corsOptions))
   app.use('/graphql', cors(corsOptions), graphqlHTTP(() => {
     let gqlLodashResult;

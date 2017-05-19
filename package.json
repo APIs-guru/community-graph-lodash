@@ -26,6 +26,7 @@
     "cors": "^2.8.3",
     "express": "^4.14.1",
     "express-graphql": "github:apis-guru/express-graphql#rootValue_dist",
+    "express-interceptor": "^1.2.0",
     "graphql": "github:apis-guru/graphql-js#directives-fork-dist",
     "graphql-lodash": "^1.0.0",
     "node-fetch": "^1.6.3",
