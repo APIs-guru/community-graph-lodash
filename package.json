@@ -1,7 +1,8 @@
 {
-  "name": "graphql-faker",
+  "name": "community-graph-lodash",
+  "private": true,
   "version": "1.2.1",
-  "description": "Mock or extend your GraphQL API with faked data. No coding required",
+  "description": "This is GraphQL Community graph proxy powered with GraphQL Lodash",
   "main": "dist/index.js",
   "bin": "dist/index.js",
   "scripts": {
