@@ -7,6 +7,7 @@ import {
   buildClientSchema,
   extendSchema,
   introspectionQuery,
+  GraphQLObjectType,
 } from 'graphql';
 
 type RequestInfo = {
@@ -88,6 +89,18 @@ getIntrospection().then(introspection => {
 
   const clientSchema = buildClientSchema(introspection.data);
   let schema = extendSchema(clientSchema, lodashDirectiveAST);
+
+  for (let type of Object.values(schema.getTypeMap())) {
+    if (type instanceof GraphQLObjectType && !type.name.startsWith('__')) {
+      let objectType = type;
+      for (let field of Object.values(objectType.getFields())) {
+        field.resolve = (source, _0, _1, info) => {
+          const key = info.path && info.path.key;
+          return source && source[key];
+        }
+      }
+    }
+  };
 
   const app = express();
 
