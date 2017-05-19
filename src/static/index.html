@@ -25,7 +25,7 @@
     }
 
     #graphiql-container {
-      height: calc(100% - 35px);
+      height: calc(100% - 35px - 38px);
     }
 
     #footer {
@@ -53,6 +53,19 @@
       color: #e535ab;
       white-space: nowrap;
     }
+
+    .banner {
+      padding: 10px;
+      background: #080808;
+      color: #ff8804;
+      text-align: center;
+      height: 38px;
+      box-sizing: border-box;
+    }
+
+    .banner a, .banner a:hover, .banner a:visited {
+      color: #f283ce;
+    }
   </style>
   <link href="//cdn.jsdelivr.net/graphiql/0.10.2/graphiql.css" rel="stylesheet" />
   <script src="//cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js"></script>
@@ -61,6 +74,13 @@
   <script src="//cdn.jsdelivr.net/graphiql/0.10.2/graphiql.min.js"></script>
 </head>
 <body>
+  <div class="banner">
+    Get Insights into GraphQL Community data from
+    <a target="_blank" href="https://neo4j.com/developer/graphql/#_graphql_community_graph_hackathon">Neo4j</a>
+    with
+    <a target="_blank" href="https://github.com/apis-guru/graphql-lodash">graphql-lodash</a>
+    (by <a target="_blank" href="https://apis.guru/">APIs.guru</a>)
+  </div>
   <div id="graphiql-container"></div>
   <div id="footer">
     <span class="label"> Data Link: </span>
@@ -86,7 +106,6 @@
 
     var link = document.getElementById('footer_link');
     var checkbox = document.getElementById('unwrap_checkbox');
-    dataLink(link);
 
     history.onpopstate = function(event) {
       setTimeout(function() {
@@ -137,6 +156,7 @@
     }
 
     var parsedParams = getParams(window.location.search);
+
     // Derive a fetch URL from the current URL, sans the GraphQL parameters.
     var graphqlParamNames = {
       query: true,
@@ -196,10 +216,24 @@
 
 
     var defaultQuery = '# This is GraphQL Community graph proxy powered with GraphQL Lodash \n' +
-              '# GraphQL Community graph: https://github.com/neo4j-graphql/graphql-community\n' +
-              '# GraphQL Lodash: https://github.com/apis-guru/graphql-lodash\n' +
-              '#\n' +
-              '# With ❤ by APIs.guru\n';
+      '# GraphQL Community graph: https://github.com/neo4j-graphql/graphql-community\n' +
+      '# GraphQL Lodash: https://github.com/apis-guru/graphql-lodash\n' +
+      '#\n' +
+      '# With ❤ by APIs.guru\n' +
+      '#\n' +
+      '# For example, the following query gets top 20 most popular repositories\n' +
+      '{\n' +
+      '  Repository @_(\n' +
+      '    sortBy: "favorites"\n' +
+      '    reverse: none,\n' +
+      '    take: 20\n' +
+      '  ) {\n' +
+      '    full_name\n' +
+      '    favorites\n' +
+      '  }\n' +
+      '}\n';
+
+    parameters.query = parameters.query || parsedParams.query || defaultQuery;
 
     ReactDOM.render(
       React.createElement(GraphiQL, {
@@ -207,12 +241,15 @@
         onEditQuery: onEditQuery,
         onEditVariables: onEditVariables,
         onEditOperationName: onEditOperationName,
-        query: parsedParams.query || defaultQuery,
+        query: parameters.query,
         variables: parsedParams.variables,
         operationName: parsedParams.operationName
       }, logo),
       document.getElementById('graphiql-container')
     );
+
+    updateURL();
+    dataLink(link);
   </script>
 </body>
 </html>
