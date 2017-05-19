@@ -29,6 +29,7 @@ import * as graphqlHTTP from 'express-graphql';
 import * as chalk from 'chalk';
 import * as cors from 'cors';
 import * as set from 'lodash/set.js';
+import * as path from 'path';
 
 const DEFAULT_PORT = 9002;
 const argv = require('yargs')
@@ -111,6 +112,9 @@ getIntrospection().then(introspection => {
       },
     };
   }));
+
+  app.get('/', express.static(path.join(__dirname, 'static')));
+
   app.listen(argv.port);
   log(`\n${chalk.green('✔')} Your GraphQL Fake API is ready to use 🚀
   http://localhost:${argv.port}/graphql

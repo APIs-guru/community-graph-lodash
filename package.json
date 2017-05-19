@@ -6,7 +6,7 @@
   "bin": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -e ts --exec 'ts-node src/index.ts'",
+    "start": "nodemon -e ts --exec 'ts-node src/index.ts' -H 'Authorization: Basic Z3JhcGhxbDpncmFwaHFs' http://107.170.69.23:7474/graphql/",
     "debug": "ts-node --inspect --compilerOptions '{\"inlineSources\":true}' src/index.ts",
     "build": "tsc"
   },
